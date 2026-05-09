@@ -1,5 +1,7 @@
 # NextStep — 30 Days MERN Fullstack Path
 
+<img width="1280" height="605" alt="nextstep" src="https://github.com/user-attachments/assets/29b3140c-e9bb-4681-b049-6244205ec844" />
+
 A structured 30-day MERN roadmap execution platform. Login with Google, complete one task daily, submit GitHub links, and track your progress.
 
 ## Tech Stack
