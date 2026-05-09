@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  name      String
+  googleId  String     @unique @map("google_id")
+  createdAt DateTime   @default(now()) @map("created_at")
+  tasks     UserTask[]
+
+  @@map("users")
+}
+
+model Task {
+  id              String     @id @default(uuid())
+  day             Int        @unique
+  title           String
+  description     String
+  focus           Json       @default("[]")
+  steps           Json       @default("[]")
+  successCriteria Json       @default("[]") @map("success_criteria")
+  submissionType  String     @map("submission_type")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  userTasks       UserTask[]
+
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  PENDING
+  COMPLETED
+}
+
+model UserTask {
+  id             String     @id @default(uuid())
+  userId         String     @map("user_id")
+  taskId         String     @map("task_id")
+  status         TaskStatus @default(PENDING)
+  submissionLink String?    @map("submission_link")
+  submissionText String?    @map("submission_text")
+  completedAt    DateTime?  @map("completed_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, taskId])
+  @@map("user_tasks")
+}
